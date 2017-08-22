@@ -57,17 +57,25 @@ func (s *DefaultService) Run() error {
 
 	// Staring default listener
 	listener, err := net.Listen("tcp", addr.String())
-	defer listener.Close()
 	if err != nil {
 		return err
 	}
+
+	defer func() {
+		listener.Close()
+		s.options.Logger.Info("Closing server listener")
+	}()
+
+	// Default channel for global stop
+	stop := make(chan struct{}, 1)
 
 	// Listening
 	go func() {
 		s.options.Logger.Infof("Starting listen on %s", listener.Addr().String())
 
 		if err := s.server.Serve(listener); err != nil {
-			s.options.Logger.Panicf("Error while trying to Serve: %v", err)
+			s.options.Logger.Errorf("Error while trying to Serve: %v", err)
+			stop <- struct{}{}
 		}
 	}()
 
@@ -85,21 +93,24 @@ func (s *DefaultService) Run() error {
 	s.options.Logger.Infof("Registered in registry with name %s", s.service.ID)
 
 	// Running hearthbeat
-	ex := make(chan struct{}, 1)
-	go s.run(ex)
+	go s.run(stop)
 
 	// Catching sigterm and process them
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
-	s.options.Logger.Infof("Received signal %s", <-ch)
-	ex <- struct{}{}
+	go func() {
+		ch := make(chan os.Signal, 1)
+		signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
 
-	// Deregistering on SIGTERM
+		sig := <-ch
+		s.options.Logger.Infof("Received signal %s", sig)
+
+		stop <- struct{}{}
+	}()
+
+	<-stop
 	if err := s.options.Registry.Deregister(s.service); err != nil {
 		return err
 	}
 
-	s.options.Logger.Info("Closing server listener")
 	return nil
 }
 

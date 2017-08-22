@@ -42,7 +42,7 @@ func (logger *Logger) Warning(args ...interface{}) {
 	logger.logger.Warn(args...)
 }
 
-func (logger *Logger) Erorr(args ...interface{}) {
+func (logger *Logger) Error(args ...interface{}) {
 	logger.logger.Error(args...)
 }
 
@@ -63,7 +63,7 @@ func (logger *Logger) Warningw(message string, args ...interface{}) {
 	logger.logger.Warnw(message, args...)
 }
 
-func (logger *Logger) Erorrw(message string, args ...interface{}) {
+func (logger *Logger) Errorw(message string, args ...interface{}) {
 	logger.logger.Errorw(message, args...)
 }
 
@@ -84,7 +84,7 @@ func (logger *Logger) Warningf(message string, args ...interface{}) {
 	logger.logger.Warnf(message, args...)
 }
 
-func (logger *Logger) Erorrf(message string, args ...interface{}) {
+func (logger *Logger) Errorf(message string, args ...interface{}) {
 	logger.logger.Errorf(message, args...)
 }
 
