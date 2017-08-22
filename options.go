@@ -2,6 +2,7 @@ package gemstone
 
 import (
 	"github.com/cryptopay-dev/gemstone/logger"
+	"github.com/cryptopay-dev/gemstone/logger/zap"
 	"github.com/cryptopay-dev/gemstone/registry"
 )
 
@@ -14,14 +15,15 @@ type Options struct {
 
 type Option func(*Options)
 
-const (
+var (
 	DefaultServiceName = "microservice"
 	DefaultVersion     = "unknown"
+	DefaultLogger      = zap.New()
 )
 
 func newOptions(opts ...Option) Options {
 	opt := Options{
-		Logger:  logger.DefaultLogger,
+		Logger:  DefaultLogger,
 		Name:    DefaultServiceName,
 		Version: DefaultVersion,
 	}

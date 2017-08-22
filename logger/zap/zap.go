@@ -1,12 +1,15 @@
-package logger
+package zap
 
-import "go.uber.org/zap"
+import (
+	"github.com/cryptopay-dev/gemstone/logger"
+	"go.uber.org/zap"
+)
 
 type ZapLogger struct {
 	logger *zap.SugaredLogger
 }
 
-func NewZap() Logger {
+func New() logger.Logger {
 	logger, _ := zap.NewProduction()
 	sugar := logger.Sugar()
 
@@ -15,7 +18,7 @@ func NewZap() Logger {
 	}
 }
 
-func (logger *ZapLogger) WithContext(args ...interface{}) Logger {
+func (logger *ZapLogger) WithContext(args ...interface{}) logger.Logger {
 	zap := logger.logger.With(args...)
 
 	return &ZapLogger{

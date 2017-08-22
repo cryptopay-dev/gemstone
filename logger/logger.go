@@ -21,7 +21,3 @@ type Logger interface {
 	Erorrf(message string, args ...interface{})
 	Panicf(message string, args ...interface{})
 }
-
-var (
-	DefaultLogger = NewZap()
-)

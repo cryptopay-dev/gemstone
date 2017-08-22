@@ -134,7 +134,12 @@ func (s *DefaultService) Client(name string) (*grpc.ClientConn, error) {
 		return nil, errors.New("Cannot find any service")
 	}
 
-	service := services[0]
+	rr := RoundRobin(services)
+	service, err := rr()
+	if err != nil {
+		return nil, err
+	}
+
 	conn, err := grpc.Dial(service.Addr, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
