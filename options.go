@@ -17,7 +17,7 @@ type Option func(*Options)
 
 var (
 	DefaultServiceName = "microservice"
-	DefaultVersion     = "unknown"
+	DefaultVersion     = "0.0.0"
 	DefaultLogger      = zap.New()
 )
 
