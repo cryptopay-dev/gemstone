@@ -2,6 +2,7 @@ package logger
 
 type Logger interface {
 	WithContext(args ...interface{}) Logger
+	Named(name string) Logger
 
 	Info(args ...interface{})
 	Debug(args ...interface{})
