@@ -63,7 +63,13 @@ func (s *DefaultService) Run() error {
 	}
 
 	// Listening
-	go s.server.Serve(listener)
+	go func() {
+		s.options.Logger.Infof("Starting listen on %s", listener.Addr().String())
+
+		if err := s.server.Serve(listener); err != nil {
+			s.options.Logger.Panicf("Error while trying to Serve: %v", err)
+		}
+	}()
 
 	// Registering service in registry
 	sid := s.options.Name + "-" + uuid.NewV4().String()
