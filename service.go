@@ -11,7 +11,7 @@ import (
 	"github.com/cryptopay-dev/gemstone/logger"
 	"github.com/cryptopay-dev/gemstone/registry"
 	"github.com/cryptopay-dev/gemstone/registry/consul"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"google.golang.org/grpc"
 )
 
@@ -26,12 +26,12 @@ func newService(opts ...Option) (*DefaultService, error) {
 
 	// Obtaining current registry
 	if options.Registry == nil {
-		registry, err := consul.New()
+		reg, err := consul.New()
 		if err != nil {
 			return nil, err
 		}
 
-		options.Registry = registry
+		options.Registry = reg
 	}
 
 	return &DefaultService{

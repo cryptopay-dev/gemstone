@@ -20,13 +20,13 @@ type Registry struct {
 
 func New() (registry.Registry, error) {
 	config := api.DefaultConfig()
-	consul, err := api.NewClient(config)
+	client, err := api.NewClient(config)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Registry{
-		client:   consul,
+		client:   client,
 		registry: make(map[string]uint64),
 	}, nil
 }
