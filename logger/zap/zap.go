@@ -10,8 +10,8 @@ type Logger struct {
 }
 
 func New() logger.Logger {
-	logger, _ := zap.NewProduction(zap.AddCallerSkip(1))
-	sugar := logger.Sugar()
+	log, _ := zap.NewProduction(zap.AddCallerSkip(1))
+	sugar := log.Sugar()
 
 	return &Logger{
 		logger: sugar,
