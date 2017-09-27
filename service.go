@@ -62,6 +62,7 @@ func (s *DefaultService) Run() error {
 	}
 
 	defer func() {
+		s.server.GracefulStop()
 		listener.Close()
 		s.options.Logger.Info("Closing server listener")
 	}()
