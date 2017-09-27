@@ -98,7 +98,7 @@ func (s *DefaultService) Run() error {
 	// Catching sigterm and process them
 	go func() {
 		ch := make(chan os.Signal, 1)
-		signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+		signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGQUIT)
 
 		sig := <-ch
 		s.options.Logger.Infof("Received signal %s", sig)
