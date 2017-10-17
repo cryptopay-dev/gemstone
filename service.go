@@ -50,7 +50,7 @@ func (s *DefaultService) Use() error {
 
 func (s *DefaultService) Run() error {
 	// Getting first opened port and run on it
-	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
+	addr, err := net.ResolveTCPAddr("tcp", s.options.Address)
 	if err != nil {
 		return err
 	}

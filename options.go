@@ -9,6 +9,7 @@ import (
 type Options struct {
 	Logger   logger.Logger
 	Registry registry.Registry
+	Address  string
 	Name     string
 	Version  string
 }
@@ -18,11 +19,13 @@ type Option func(*Options)
 var (
 	DefaultServiceName = "microservice"
 	DefaultVersion     = "0.0.0"
+	DefaultAddress     = "localhost:0"
 	DefaultLogger      = zap.New()
 )
 
 func newOptions(opts ...Option) Options {
 	opt := Options{
+		Address: DefaultAddress,
 		Logger:  DefaultLogger,
 		Name:    DefaultServiceName,
 		Version: DefaultVersion,
@@ -50,6 +53,12 @@ func Logger(logger logger.Logger) Option {
 func Registry(registry registry.Registry) Option {
 	return func(o *Options) {
 		o.Registry = registry
+	}
+}
+
+func Address(address string) Option {
+	return func(o *Options) {
+		o.Address = address
 	}
 }
 
