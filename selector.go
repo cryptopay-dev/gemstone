@@ -21,7 +21,7 @@ func RoundRobin(services []*registry.Service) Next {
 
 	return func() (*registry.Service, error) {
 		if len(services) == 0 {
-			return nil, errors.New("No services available")
+			return nil, errors.New("no services available")
 		}
 
 		mtx.Lock()
