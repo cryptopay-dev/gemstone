@@ -86,14 +86,15 @@ func (s *DefaultService) Run() error {
 		ID:      sid,
 		Name:    s.options.Name,
 		Version: s.options.Version,
-		Addr:    listener.Addr().String(),
+		Addr:    addr.IP.String(),
+		Port:    addr.Port,
 	}
 	if err := s.register(); err != nil {
 		return err
 	}
 	s.options.Logger.Infof("Registered in registry with name %s", s.service.ID)
 
-	// Running hearthbeat
+	// Running heartbeat
 	go s.run(stop)
 
 	// Catching sigterm and process them
@@ -120,7 +121,7 @@ func (s *DefaultService) register() error {
 		return err
 	}
 
-	s.options.Logger.Debugf("Updated registery record")
+	s.options.Logger.Debugf("Updated registry record")
 	return nil
 }
 
@@ -149,7 +150,7 @@ func (s *DefaultService) Client(name string) (*grpc.ClientConn, error) {
 	}
 
 	if len(services) == 0 {
-		return nil, errors.New("Cannot find any service")
+		return nil, errors.New("cannot find any service")
 	}
 
 	rr := RoundRobin(services)

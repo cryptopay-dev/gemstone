@@ -56,14 +56,12 @@ func (r *Registry) Register(s registry.Service) error {
 		DeregisterCriticalServiceAfter: fmt.Sprintf("%v", deregTTL),
 	}
 
-	tags, _ := json.Marshal(s)
-
 	if err := r.client.Agent().ServiceRegister(&api.AgentServiceRegistration{
 		ID:      s.ID,
 		Name:    s.Name,
 		Port:    s.Port,
 		Address: s.Addr,
-		Tags:    []string{string(tags)},
+		Tags:    []string{s.Name},
 		Check:   check,
 	}); err != nil {
 		return err
@@ -122,11 +120,3 @@ func (r *Registry) List() ([]*registry.Service, error) {
 
 	return services, nil
 }
-
-// func (r *Registry) GetService(name string) ([]*registry.Service, error) {
-// 	res, _, err := r.client.Health().Service(name, "", false, nil)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// }
