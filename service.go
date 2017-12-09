@@ -80,13 +80,19 @@ func (s *DefaultService) Run() error {
 		}
 	}()
 
+	// <nil> - is not valid address
+	var ip = addr.IP.String()
+	if len(addr.IP) == 0 {
+		ip = ""
+	}
+
 	// Registering service in registry
 	sid := s.options.Name + "-" + uuid.NewV4().String()
 	s.service = registry.Service{
 		ID:      sid,
 		Name:    s.options.Name,
 		Version: s.options.Version,
-		Addr:    addr.IP.String(),
+		Addr:    ip,
 		Port:    addr.Port,
 	}
 	if err := s.register(); err != nil {
