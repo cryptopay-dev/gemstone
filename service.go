@@ -84,6 +84,10 @@ func (s *DefaultService) Run() error {
 
 	// <nil> - is not valid address
 	var ip = addr.IP.String()
+	if len(addr.IP) == 0 {
+		ip = ""
+	}
+
 	if ip, err = internal.Extract(ip); err != nil {
 		return err
 	}
