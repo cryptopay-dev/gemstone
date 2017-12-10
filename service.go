@@ -2,6 +2,7 @@ package gemstone
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -165,7 +166,10 @@ func (s *DefaultService) Client(name string) (*grpc.ClientConn, error) {
 		return nil, err
 	}
 
-	conn, err := grpc.Dial(service.Addr, grpc.WithInsecure())
+	conn, err := grpc.Dial(
+		fmt.Sprintf("%s:%d", service.Addr, service.Port),
+		grpc.WithInsecure(),
+	)
 	if err != nil {
 		return nil, err
 	}
