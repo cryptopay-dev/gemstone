@@ -16,7 +16,7 @@ func init() {
 type Next func() (*registry.Service, error)
 
 func RoundRobin(services []*registry.Service) Next {
-	var i = rand.Int()
+	var i = rand.Int() // Use of weak random number generator (math/rand instead of crypto/rand),HIGH,MEDIUM (gas)
 	var mtx sync.Mutex
 
 	return func() (*registry.Service, error) {

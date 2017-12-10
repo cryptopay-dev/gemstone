@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/cryptopay-dev/gemstone/internal"
 	"github.com/cryptopay-dev/gemstone/logger"
 	"github.com/cryptopay-dev/gemstone/registry"
 	"github.com/cryptopay-dev/gemstone/registry/consul"
@@ -75,16 +76,16 @@ func (s *DefaultService) Run() error {
 	go func() {
 		s.options.Logger.Infof("Starting listen on %s", listener.Addr().String())
 
-		if err := s.server.Serve(listener); err != nil {
-			s.options.Logger.Errorf("Error while trying to Serve: %v", err)
+		if serveErr := s.server.Serve(listener); err != nil {
+			s.options.Logger.Errorf("Error while trying to Serve: %v", serveErr)
 			stop <- struct{}{}
 		}
 	}()
 
 	// <nil> - is not valid address
 	var ip = addr.IP.String()
-	if len(addr.IP) == 0 {
-		ip = ""
+	if ip, err = internal.Extract(ip); err != nil {
+		return err
 	}
 
 	// Registering service in registry
