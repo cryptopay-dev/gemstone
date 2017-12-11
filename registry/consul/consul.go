@@ -1,7 +1,6 @@
 package consul
 
 import (
-	"encoding/json"
 	"fmt"
 	"sync"
 	"time"
@@ -94,12 +93,12 @@ func (r *Registry) GetService(name string) ([]*registry.Service, error) {
 			continue
 		}
 
-		var service registry.Service
-		if err := json.Unmarshal([]byte(s.Service.Tags[0]), &service); err != nil {
-			continue
-		}
-
-		services = append(services, &service)
+		services = append(services, &registry.Service{
+			ID:   s.Service.ID,
+			Name: s.Service.Service,
+			Port: s.Service.Port,
+			Addr: s.Service.Address,
+		})
 	}
 
 	return services, nil
